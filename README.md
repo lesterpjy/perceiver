@@ -30,6 +30,80 @@ interfaces for model training and Hugging Face 🤗 interfaces for inference.
   </tr>
 </table>
 
+
+## Comprehensive Implementation Check for Perceiver Architecture
+
+`perceiver_pytorch.py`: https://github.com/lucidrains/perceiver-pytorch/blob/main/perceiver_pytorch/perceiver_pytorch.py
+### Core Architecture Components
+
+| Component             | Paper Description                                   | Implementation in `perceiver_pytorch.py`                                  | Match? |
+| --------------------- | --------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
+| **Overall Structure** | Cross-attention → Self-attention iteratively        | Implements modular cross-attention and self-attention blocks as described | ✓      |
+| **Latent Array**      | Learned parameter array                             | `self.latents = nn.Parameter(torch.randn(num_latents, latent_dim))`       | ✓      |
+| **Cross-Attention**   | Asymmetric attention with queries from latent array | `Attention` class with query from latent, key/value from input            | ✓      |
+| **Self-Attention**    | Standard Transformer-style self-attention           | `Attention` class with matching implementation                            | ✓      |
+| **Feed-Forward**      | Transformer-style with expansion                    | `FeedForward` with expansion factor (`mult`) of 4                         | ✓      |
+
+### Specific Numeric Values
+
+|Parameter|Value in Paper|Implementation Default|Match?|
+|---|---|---|---|
+|`num_latents`|512 (ImageNet)|512|✓|
+|`latent_dim`|1024 (ImageNet)|512|⚠️ Different|
+|`cross_heads`|1|1|✓|
+|`latent_heads`|8|8|✓|
+|`cross_dim_head`|Not explicitly stated|64|N/A|
+|`latent_dim_head`|Not explicitly stated|64|N/A|
+|`self_per_cross_attn`|6 (ImageNet)|1|⚠️ Different|
+|`num_freq_bands`|64 (ImageNet)|Required parameter|N/A|
+|`depth`|8 iterations × 6 blocks = 48|Required parameter|N/A|
+
+### Implementation Details
+
+|Feature|Paper Description|Implementation|Match?|
+|---|---|---|---|
+|**Activation Function**|GELU|`GEGLU()` using F.gelu|✓|
+|**Layer Normalization**|Before attention and FF|`PreNorm` wrapper around both|✓|
+|**Attention Formula**|Standard scaled dot-product attention|Correctly implemented with scale factor|✓|
+|**Feed-Forward**|MLP with GELU, no bottleneck|Uses GEGLU with expansion factor 4|✓|
+|**Weight Tying**|Shared weights except first cross-attend|`cache_fn` decorator with `_cache` control|✓|
+|**Position Encoding**|Fourier features with concatenation|`fourier_encode` function with correct math|✓|
+|**Output Pooling**|Global average over latents|`Reduce('b n d -> b d', 'mean')`|✓|
+|**Output Classification**|Linear layer after pooling|Linear layer after normalization|✓|
+
+### Attention Implementation
+
+|Detail|Paper Description|Implementation|Match?|
+|---|---|---|---|
+|**QKV Projection**|Linear projections|Separate linear layers for Q, K, V|✓|
+|**Multi-head Implementation**|Reshape into multiple heads|Correct reshaping with `rearrange`|✓|
+|**Attention Scale**|1/√(dimension per head)|`self.scale = dim_head ** -0.5`|✓|
+|**Mask Handling**|Optional masking|Mask handling with correct values|✓|
+
+### Fourier Position Encoding
+
+|Detail|Paper Description|Implementation|Match?|
+|---|---|---|---|
+|**Frequency Generation**|Linearly spaced up to max_freq/2|`torch.linspace(1., max_freq / 2, num_bands)`|✓|
+|**Encoding Function**|sin/cos pairs + original position|`torch.cat([x.sin(), x.cos()], dim = -1)` + concatenation with original|✓|
+|**Position Scaling**|Multiplied by π|`x = x * scales * pi`|✓|
+
+### Input/Output Processing
+
+|Detail|Paper Description|Implementation|Match?|
+|---|---|---|---|
+|**Input Reshaping**|Flattening spatial dimensions|`rearrange(data, 'b ... d -> b (...) d')`|✓|
+|**Position Handling**|Position encoding concatenated|Concatenated to input data|✓|
+|**Final Classification**|Global pooling + normalization|Global pooling + layer norm + linear|✓|
+
+### Key Implementation Differences
+
+1. **Default latent dimension**: Paper uses 1024 for ImageNet while implementation defaults to 512
+2. **Self-attention blocks**: Paper uses 6 per cross-attention while implementation defaults to 1
+3. **Weight sharing**: Paper shares weights by default for all but first cross-attention, implementation defaults to no sharing
+
+The implementation is structurally correct and follows the paper's architecture, but users would need to adjust parameters from defaults to match the exact configurations used in the original paper's experiments.
+
 ## Overview
 
 Core of the `perceiver-io` library are *backend models*, lightweight PyTorch implementations of Perceiver,
