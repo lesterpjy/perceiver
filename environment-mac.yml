@@ -1,0 +1,9 @@
+name: perceiver-io
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch=2.0
+  - torchvision=0.15
+  - pip>=22

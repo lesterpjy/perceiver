@@ -2,7 +2,9 @@ from perceiver.model.vision.image_classifier.backend import (
     ClassificationDecoderConfig,
     ImageClassifier,
     ImageClassifierConfig,
+    PerceiverClassifierConfig,
     ImageEncoderConfig,
+    PerceiverClassifier,
 )
 from perceiver.model.vision.image_classifier.huggingface import (
     convert_checkpoint,

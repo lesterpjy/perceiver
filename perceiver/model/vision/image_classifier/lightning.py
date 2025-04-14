@@ -1,23 +1,25 @@
 from typing import Any
 
-from perceiver.model.core.lightning import is_checkpoint, LitClassifier
+from perceiver.model.core.lightning import is_checkpoint, LitClassifier, LitPerceiverClassifier
 from perceiver.model.vision.image_classifier.backend import (
     ClassificationDecoderConfig,
     ImageClassifier,
+    PerceiverClassifier,
     ImageClassifierConfig,
     ImageEncoderConfig,
+    PerceiverClassifierConfig,
 )
 
 
-class LitImageClassifier(LitClassifier):
-    def __init__(self, encoder: ImageEncoderConfig, decoder: ClassificationDecoderConfig, *args: Any, **kwargs: Any):
-        super().__init__(encoder, decoder, *args, **kwargs)
-        self.model = ImageClassifier(
-            ImageClassifierConfig(
+class LitImageClassifier(LitPerceiverClassifier):
+    def __init__(self, encoder: ImageEncoderConfig, *args: Any, **kwargs: Any):
+        super().__init__(encoder, *args, **kwargs)
+        self.model = PerceiverClassifier(
+            PerceiverClassifierConfig(
                 encoder=encoder,
-                decoder=decoder,
                 num_latents=self.hparams.num_latents,
                 num_latent_channels=self.hparams.num_latent_channels,
+                num_classes=self.hparams.num_classes,
                 activation_checkpointing=self.hparams.activation_checkpointing,
                 activation_offloading=self.hparams.activation_offloading,
             )

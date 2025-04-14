@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from typing import Tuple
+from torch import nn
 
 import torch
 from einops import rearrange
+from einops.layers.torch import Reduce
 
 from perceiver.model.core import (
     ClassificationDecoderConfig,
@@ -14,6 +16,7 @@ from perceiver.model.core import (
     PerceiverEncoder,
     PerceiverIO,
     PerceiverIOConfig,
+    PerceiverConfig,
     TrainableQueryProvider,
 )
 
@@ -25,6 +28,8 @@ class ImageEncoderConfig(EncoderConfig):
 
 
 ImageClassifierConfig = PerceiverIOConfig[ImageEncoderConfig, ClassificationDecoderConfig]
+
+PerceiverClassifierConfig = PerceiverConfig[ImageEncoderConfig]
 
 
 class ImageInputAdapter(InputAdapter):
@@ -90,6 +95,43 @@ class ImageClassifier(PerceiverIO):
     def forward(self, x, pad_mask=None):
         latents = self.encoder(x, pad_mask=pad_mask)
         return self.decoder(latents)
+
+
+class PerceiverClassifier:
+    def __init__(self, config: PerceiverClassifierConfig):
+        input_adapter = ImageInputAdapter(
+            image_shape=config.encoder.image_shape,
+            num_frequency_bands=config.encoder.num_frequency_bands,
+        )
+
+        encoder_kwargs = config.encoder.base_kwargs()
+        if encoder_kwargs["num_cross_attention_qk_channels"] is None:
+            encoder_kwargs["num_cross_attention_qk_channels"] = input_adapter.num_input_channels
+
+        self.encoder = PerceiverEncoder(
+            input_adapter=input_adapter,
+            num_latents=config.num_latents,
+            num_latent_channels=config.num_latent_channels,
+            activation_checkpointing=config.activation_checkpointing,
+            activation_offloading=config.activation_offloading,
+        )
+
+        self.to_logits = nn.Sequential(
+            Reduce("b n d -> b d", "mean"),
+            nn.LayerNorm(config.num_latent_channels),
+            nn.Linear(config.num_latent_channels, config.num_classes),
+        )
+
+        # self.to_logits = nn.Sequential(
+        #     Reduce('b n d -> b d', 'mean'),
+        #     nn.LayerNorm(latent_dim),
+        #     nn.Linear(latent_dim, num_classes)
+        # ) if final_classifier_head else nn.Identity()
+        self.config = config
+
+    def forward(self, x, pad_mask=None):
+        latents = self.encoder(x, pad_mask=pad_mask)
+        return self.to_logits(latents)
 
 
 # backwards-compatibility

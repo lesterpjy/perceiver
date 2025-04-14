@@ -544,7 +544,8 @@ class PerceiverEncoder(nn.Module):
             )
             return (
                 activation_checkpoint_wrapper(layer, offload_to_cpu=activation_offloading)
-                if activation_checkpointing else layer
+                if activation_checkpointing
+                else layer
             )
 
         def self_attn():
@@ -688,6 +689,15 @@ class PerceiverIO(nn.Sequential):
         return self[1]
 
 
+class Perceiver(nn.Sequential):
+    def __init__(self, encoder: PerceiverEncoder):
+        super().__init__(encoder)
+
+    @property
+    def encoder(self):
+        return self[0]
+
+
 class PerceiverAR(nn.Module):
     def __init__(
         self,
@@ -740,7 +750,8 @@ class PerceiverAR(nn.Module):
             )
             return (
                 activation_checkpoint_wrapper(layer, offload_to_cpu=activation_offloading)
-                if activation_checkpointing else layer
+                if activation_checkpointing
+                else layer
             )
 
         def self_attn():

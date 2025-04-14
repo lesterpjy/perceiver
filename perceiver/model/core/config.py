@@ -62,6 +62,23 @@ class PerceiverIOConfig(Generic[E, D]):
 
 
 @dataclass
+class PerceiverConfig(Generic[E]):
+    encoder: E
+    num_latents: int  # N
+    num_latent_channels: int  # D
+    activation_checkpointing: bool = False
+    activation_offloading: bool = False
+    num_classes: int
+
+
+# self.to_logits = nn.Sequential(
+#     Reduce('b n d -> b d', 'mean'),
+#     nn.LayerNorm(latent_dim),
+#     nn.Linear(latent_dim, num_classes)
+# ) if final_classifier_head else nn.Identity()
+
+
+@dataclass
 class PerceiverARConfig:
     num_heads: int = 8
     max_heads_parallel: Optional[int] = None

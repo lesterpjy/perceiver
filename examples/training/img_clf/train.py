@@ -3,7 +3,12 @@ import pytorch_lightning as pl
 
 from perceiver.data.vision import MNISTDataModule
 from perceiver.model.core import ClassificationDecoderConfig
-from perceiver.model.vision.image_classifier import ImageClassifierConfig, ImageEncoderConfig, LitImageClassifier
+from perceiver.model.vision.image_classifier import (
+    ImageClassifierConfig,
+    ImageEncoderConfig,
+    LitImageClassifier,
+    PerceiverClassifierConfig,
+)
 from perceiver.scripts.lrs import ConstantWithWarmupLR
 from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.strategies import DDPStrategy
@@ -23,7 +28,7 @@ setattr(LitImageClassifier, "configure_optimizers", configure_optimizers),
 
 data = MNISTDataModule(batch_size=128)
 
-config = ImageClassifierConfig(
+config = PerceiverClassifierConfig(
     encoder=ImageEncoderConfig(
         image_shape=data.image_shape,
         num_frequency_bands=32,
@@ -36,16 +41,17 @@ config = ImageClassifierConfig(
         dropout=0.1,
         init_scale=0.1,
     ),
-    decoder=ClassificationDecoderConfig(
-        num_output_query_channels=128,
-        num_cross_attention_heads=1,
-        num_classes=data.num_classes,
-        dropout=0.1,
-        init_scale=0.1,
-    ),
     num_latents=32,
     num_latent_channels=128,
+    num_classes=100,
 )
+
+
+# self.to_logits = nn.Sequential(
+#     Reduce('b n d -> b d', 'mean'),
+#     nn.LayerNorm(latent_dim),
+#     nn.Linear(latent_dim, num_classes)
+# ) if final_classifier_head else nn.Identity()
 
 if __name__ == "__main__":
     lit_model = LitImageClassifier.create(config)
