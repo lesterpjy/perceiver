@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=9
+#SBATCH --gpus=1
+#SBATCH --job-name=TrainPerceiverIO
+#SBATCH --ntasks=1
+#SBATCH --time=02:00:00
+#SBATCH --mem=32000M
+#SBATCH --output=snellius_jobs/outfiles/perceiver_train_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Set working directory to repository root
+cd /path/to/your/perceiver-io  # Replace with your actual path
+
+# Create and activate the perceiver-io environment if it doesn't exist
+# Comment these lines out if the environment is already created
+if ! conda env list | grep -q "perceiver-io"; then
+    conda env create -f environment.yml
+fi
+
+# Activate the perceiver-io environment
+source activate perceiver-io
+
+# Install dependencies with Poetry
+# Check if Poetry is installed, if not, install it
+if ! command -v poetry &> /dev/null; then
+    echo "Installing Poetry..."
+    curl -sSL https://install.python-poetry.org | python3 -
+fi
+
+# Install all dependencies including examples
+poetry install --all-extras --with examples
+
+# Run the training script
+srun python examples/training/img_clf/train.py

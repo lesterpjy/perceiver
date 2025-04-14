@@ -47,12 +47,6 @@ config = PerceiverClassifierConfig(
 )
 
 
-# self.to_logits = nn.Sequential(
-#     Reduce('b n d -> b d', 'mean'),
-#     nn.LayerNorm(latent_dim),
-#     nn.Linear(latent_dim, num_classes)
-# ) if final_classifier_head else nn.Identity()
-
 if __name__ == "__main__":
     lit_model = LitImageClassifier.create(config)
 

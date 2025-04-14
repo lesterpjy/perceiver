@@ -131,6 +131,7 @@ class PerceiverClassifier:
 
     def forward(self, x, pad_mask=None):
         latents = self.encoder(x, pad_mask=pad_mask)
+        print(f"encoder latents shape: {latents.shape}")
         return self.to_logits(latents)
 
 
