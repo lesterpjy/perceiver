@@ -66,9 +66,9 @@ class PerceiverConfig(Generic[E]):
     encoder: E
     num_latents: int  # N
     num_latent_channels: int  # D
+    num_classes: int
     activation_checkpointing: bool = False
     activation_offloading: bool = False
-    num_classes: int
 
 
 # self.to_logits = nn.Sequential(

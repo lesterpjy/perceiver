@@ -1,0 +1,84 @@
+# Configuration file for Perceiver IO training
+
+# Experiment metadata
+experiment:
+  name: "perceiver_mnist"
+  description: "MNIST classification using Perceiver IO architecture"
+  seed: 42
+  output_dir: "results"
+
+# Data configuration
+data:
+  dataset: "mnist"
+  batch_size: 128
+  num_workers: 4
+  val_split: 0.1
+  pin_memory: true
+
+# Model architecture configuration
+model:
+  # Image encoder settings
+  encoder:
+    num_frequency_bands: 32
+    num_cross_attention_layers: 2
+    num_cross_attention_heads: 1
+    num_self_attention_blocks: 3
+    num_self_attention_layers_per_block: 3
+    first_cross_attention_layer_shared: false
+    first_self_attention_block_shared: false
+    dropout: 0.1
+    init_scale: 0.1
+  
+  # Perceiver core settings
+  perceiver:
+    num_latents: 32
+    num_latent_channels: 128
+    num_classes: 10
+
+# Training configuration
+training:
+  max_epochs: 30
+  accelerator: "gpu"
+  devices: 2
+  strategy: "ddp_static"
+  precision: 32
+  deterministic: true
+  
+  # Optimizer settings
+  optimizer:
+    name: "adamw"
+    lr: 1.0e-3
+    weight_decay: 1.0e-4
+  
+  # Learning rate scheduler
+  lr_scheduler:
+    name: "constant_with_warmup"
+    warmup_steps: 500
+  
+  # Early stopping
+  early_stopping:
+    enabled: true
+    monitor: "val_acc"
+    patience: 5
+    min_delta: 0.001
+    mode: "max"
+  
+  # Checkpointing
+  checkpoint:
+    dirpath: "checkpoints"
+    filename: "perceiver-{epoch:02d}-{val_acc:.4f}"
+    save_top_k: 3
+    monitor: "val_acc"
+    mode: "max"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file: true
+  console: true
+  tensorboard: true
+  csv: true
+
+# Testing configuration
+testing:
+  use_best_checkpoint: true

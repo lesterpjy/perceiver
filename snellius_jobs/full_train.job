@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gres=gpu:2            # Using 2 GPUs as per the training script
+#SBATCH --cpus-per-task=9
+#SBATCH --gpus=2                # Matching the 2 GPUs in the script
+#SBATCH --job-name=TrainPerceiverIO
+#SBATCH --ntasks=1
+#SBATCH --time=04:00:00         # Increased time for full train-eval-test cycle
+#SBATCH --mem=48000M            # Increased memory for more comprehensive analysis
+#SBATCH --output=outfiles/perceiver_train_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Set working directory to repository root
+cd ~/group-michal/perceiver/
+
+# Skip environment creation if it already exists
+# Only activate the existing environment
+echo "Activating perceiver-io environment..."
+source activate perceiver-io
+
+# Configure Poetry to not create a separate virtual environment
+# and install packages directly into the conda environment
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+export POETRY_VIRTUALENVS_CREATE=false
+
+# Install critical dependencies directly with pip
+echo "Installing critical dependencies directly with pip..."
+pip install pytorch-lightning>=2.0 torch>=2.0 torchmetrics>=0.9 einops>=0.4 datasets>=2.4 torchvision>=0.15 opencv-python>=4.6 transformers>=4.28
+
+# Install additional packages for enhanced training, evaluation, and reporting
+echo "Installing additional packages for enhanced training suite..."
+pip install matplotlib>=3.5 seaborn>=0.12 pandas>=1.4 fvcore>=0.1.5 numpy>=1.22 tensorboard>=2.10 loguru>=0.6.0 pyyaml>=6.0
+
+# Install Poetry if not already installed
+if ! command -v poetry &> /dev/null; then
+    echo "Installing Poetry..."
+    curl -sSL https://install.python-poetry.org | python3 -
+fi
+
+# Add Poetry to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Install the project in development mode
+echo "Installing the project with pip in development mode..."
+pip install -e .
+
+# Create necessary directories
+mkdir -p results_full
+mkdir -p outfiles_full
+
+# Copy config files to appropriate location
+echo "Preparing configuration files..."
+CONFIG_DIR="examples/training/img_clf"
+
+# Run the training script with config
+echo "Starting comprehensive training suite..."
+srun python -m examples.training.img_clf.train --config ${CONFIG_DIR}/perceiver_config.yaml

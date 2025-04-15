@@ -43,7 +43,7 @@ config = PerceiverClassifierConfig(
     ),
     num_latents=32,
     num_latent_channels=128,
-    num_classes=100,
+    num_classes=10,
 )
 
 
