@@ -1,0 +1,71 @@
+2025-04-15 16:55:01.822 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 16:55:01.822 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 16:55:01.822 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 16:55:01.822 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 16:55:01.823 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 16:55:01.824 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 16:55:01.824 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 16:55:01.826 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 16:55:01.827 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 16:55:01.842 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 46,160/46,160 trainable parameters
+2025-04-15 16:55:01.845 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 16:55:01.846 | INFO     | __main__:main:160 - Model has 46,160/46,160 trainable parameters
+2025-04-15 16:55:01.847 | INFO     | examples.training.img_clf.full_train:create_trainer:485 - Enabling tensor cores with medium float32 precision
+2025-04-15 16:55:01.847 | INFO     | examples.training.img_clf.full_train:create_trainer:507 - Using 'auto' strategy for single GPU training
+2025-04-15 16:55:02.031 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 16:55:02.031 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 16:55:02.031 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 16:55:02.031 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 16:55:06.502 | INFO     | examples.training.img_clf.full_train:on_fit_start:85 - Model has 46,160 total parameters
+2025-04-15 16:55:06.502 | INFO     | examples.training.img_clf.full_train:on_fit_start:86 - Model has 46,160 trainable parameters
+2025-04-15 16:55:06.503 | INFO     | examples.training.img_clf.full_train:on_fit_start:122 - Starting training process, tracking compute stats...
+2025-04-15 16:56:52.533 | INFO     | examples.training.img_clf.full_train:on_fit_end:138 - Training completed in 0:01:46.030575
+2025-04-15 16:56:52.534 | INFO     | examples.training.img_clf.full_train:on_fit_end:139 - Average epoch time: 0:00:00
+2025-04-15 16:56:52.534 | INFO     | examples.training.img_clf.full_train:on_fit_end:150 - Calculating FLOPS for model...
+2025-04-15 16:56:52.799 | INFO     | examples.training.img_clf.full_train:on_fit_end:155 - FLOPS per forward pass: 2,665,416.0
+2025-04-15 16:56:52.799 | INFO     | examples.training.img_clf.full_train:on_fit_end:163 - Estimated total FLOPS: 19,990,620,000.0
+2025-04-15 16:56:52.806 | INFO     | __main__:main:174 - ==================================================
+2025-04-15 16:56:52.806 | INFO     | __main__:main:175 - STARTING TESTING
+2025-04-15 16:56:52.806 | INFO     | __main__:main:176 - ==================================================
+2025-04-15 16:56:57.284 | ERROR    | __main__:main:186 - Error during training: `test_dataloader` must be implemented to be used with the Lightning Trainer
+2025-04-15 16:56:57.291 | ERROR    | __main__:main:189 - Traceback (most recent call last):
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/test_perceiver_local.py", line 177, in main
+    test_result = trainer.test(lit_model, datamodule=data)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 706, in test
+    return call._call_and_handle_interrupt(
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 749, in _test_impl
+    results = self._run(model, ckpt_path=ckpt_path)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 935, in _run
+    results = self._run_stage()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 971, in _run_stage
+    return self._evaluation_loop.run()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/utilities.py", line 177, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 98, in run
+    self.setup_data()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 150, in setup_data
+    dataloaders = _request_dataloader(source)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/connectors/data_connector.py", line 328, in _request_dataloader
+    return data_source.dataloader()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/connectors/data_connector.py", line 298, in dataloader
+    return call._call_lightning_datamodule_hook(self.instance.trainer, self.name)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 162, in _call_lightning_datamodule_hook
+    return fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/core/hooks.py", line 445, in test_dataloader
+    raise MisconfigurationException("`test_dataloader` must be implemented to be used with the Lightning Trainer")
+lightning_fabric.utilities.exceptions.MisconfigurationException: `test_dataloader` must be implemented to be used with the Lightning Trainer
+

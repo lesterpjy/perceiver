@@ -1,0 +1,21 @@
+2025-04-15 15:12:00.085 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 15:12:00.086 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 15:12:00.086 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 15:12:00.087 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 15:12:00.093 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 15:12:00.093 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0

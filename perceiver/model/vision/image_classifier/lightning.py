@@ -36,8 +36,23 @@ class LitImageClassifier(LitPerceiverClassifier):
                 self.model.load_state_dict(wrapper.backend_model.state_dict())
 
     def step(self, batch):
-        x, y = batch["image"], batch["label"]
+        # Handle both dict format and tuple format
+        if isinstance(batch, dict) and "image" in batch and "label" in batch:
+            x, y = batch["image"], batch["label"]
+        elif isinstance(batch, (list, tuple)) and len(batch) == 2:
+            x, y = batch
+        else:
+            raise ValueError(f"Unexpected batch format: {type(batch)}. Expected dict with 'image'/'label' keys or tuple of (image, label)")
+        
+        # Ensure x is a tensor
+        if not hasattr(x, 'shape'):
+            raise TypeError(f"Input x must be a tensor with shape attribute, got {type(x)}")
+            
         return self.loss_acc(self(x), y)
 
     def forward(self, x):
+        # Ensure x is a tensor
+        if not hasattr(x, 'shape'):
+            raise TypeError(f"Input x must be a tensor with shape attribute, got {type(x)}")
+            
         return self.model(x)

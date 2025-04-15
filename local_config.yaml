@@ -1,0 +1,84 @@
+# Configuration file for local Perceiver IO training
+
+# Experiment metadata
+experiment:
+  name: "perceiver_mnist_local"
+  description: "Local CPU test of MNIST classification using Perceiver IO"
+  seed: 42
+  output_dir: "results_local"
+
+# Data configuration
+data:
+  dataset: "mnist"
+  batch_size: 32
+  num_workers: 0
+  val_split: 0.1
+  pin_memory: false
+
+# Model architecture configuration
+model:
+  # Image encoder settings - reduced for CPU testing
+  encoder:
+    num_frequency_bands: 8
+    num_cross_attention_layers: 1
+    num_cross_attention_heads: 1
+    num_self_attention_blocks: 1
+    num_self_attention_layers_per_block: 1
+    first_cross_attention_layer_shared: false
+    first_self_attention_block_shared: false
+    dropout: 0.1
+    init_scale: 0.1
+  
+  # Perceiver core settings - reduced for CPU testing
+  perceiver:
+    num_latents: 8
+    num_latent_channels: 32
+    num_classes: 10
+
+# Training configuration
+training:
+  max_epochs: 1
+  accelerator: "cpu"
+  devices: 1
+  strategy: "auto"
+  precision: 32
+  deterministic: true
+  
+  # Optimizer settings
+  optimizer:
+    name: "adamw"
+    lr: 1.0e-3
+    weight_decay: 1.0e-4
+  
+  # Learning rate scheduler
+  lr_scheduler:
+    name: "constant_with_warmup"
+    warmup_steps: 10
+  
+  # Early stopping - disabled for quick testing
+  early_stopping:
+    enabled: false
+    monitor: "val_acc"
+    patience: 5
+    min_delta: 0.001
+    mode: "max"
+  
+  # Checkpointing
+  checkpoint:
+    dirpath: "checkpoints"
+    filename: "perceiver-{epoch:02d}-{val_acc:.4f}"
+    save_top_k: 1
+    monitor: "val_acc"
+    mode: "max"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file: true
+  console: true
+  tensorboard: true
+  csv: true
+
+# Testing configuration
+testing:
+  use_best_checkpoint: false

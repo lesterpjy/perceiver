@@ -1,0 +1,58 @@
+2025-04-15 17:03:44.890 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 17:03:44.891 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 17:03:44.891 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 17:03:44.892 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 17:03:44.896 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 17:03:44.896 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 17:03:44.911 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 46,160/46,160 trainable parameters
+2025-04-15 17:03:44.912 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 17:03:44.912 | INFO     | __main__:main:160 - Model has 46,160/46,160 trainable parameters
+2025-04-15 17:03:44.913 | INFO     | examples.training.img_clf.full_train:create_trainer:485 - Enabling tensor cores with medium float32 precision
+2025-04-15 17:03:44.913 | INFO     | examples.training.img_clf.full_train:create_trainer:507 - Using 'auto' strategy for single GPU training
+2025-04-15 17:03:45.078 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 17:03:45.078 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 17:03:45.078 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 17:03:45.078 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 17:03:49.616 | INFO     | examples.training.img_clf.full_train:on_fit_start:85 - Model has 46,160 total parameters
+2025-04-15 17:03:49.616 | INFO     | examples.training.img_clf.full_train:on_fit_start:86 - Model has 46,160 trainable parameters
+2025-04-15 17:03:49.616 | INFO     | examples.training.img_clf.full_train:on_fit_start:122 - Starting training process, tracking compute stats...
+2025-04-15 17:05:31.130 | INFO     | examples.training.img_clf.full_train:on_fit_end:138 - Training completed in 0:01:41.513447
+2025-04-15 17:05:31.130 | INFO     | examples.training.img_clf.full_train:on_fit_end:139 - Average epoch time: 0:00:00
+2025-04-15 17:05:31.131 | INFO     | examples.training.img_clf.full_train:on_fit_end:150 - Calculating FLOPS for model...
+2025-04-15 17:05:31.413 | INFO     | examples.training.img_clf.full_train:on_fit_end:155 - FLOPS per forward pass: 2,665,416.0
+2025-04-15 17:05:31.413 | INFO     | examples.training.img_clf.full_train:on_fit_end:163 - Estimated total FLOPS: 19,990,620,000.0
+2025-04-15 17:05:31.421 | INFO     | __main__:main:174 - ==================================================
+2025-04-15 17:05:31.421 | INFO     | __main__:main:175 - STARTING TESTING
+2025-04-15 17:05:31.421 | INFO     | __main__:main:176 - ==================================================
+2025-04-15 17:05:43.519 | INFO     | examples.training.img_clf.full_train:save_stats:195 - Compute statistics saved to results_local/perceiver_mnist_local_20250415_170344/compute_stats.json
+2025-04-15 17:05:44.582 | INFO     | examples.training.img_clf.full_train:generate_report:413 - Confusion matrix saved to results_local/perceiver_mnist_local_20250415_170344/confusion_matrix.png
+2025-04-15 17:05:44.582 | INFO     | examples.training.img_clf.full_train:generate_report:416 - ==================================================
+2025-04-15 17:05:44.582 | INFO     | examples.training.img_clf.full_train:generate_report:417 - TRAINING COMPLETE - PERFORMANCE SUMMARY
+2025-04-15 17:05:44.582 | INFO     | examples.training.img_clf.full_train:generate_report:418 - ==================================================
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:419 - Epochs completed: 2/1
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:423 - Final test accuracy: 0.8830
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:425 - Final test F1 score: 0.8830
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:428 - 
+COMPUTE RESOURCES:
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:429 - Total training time: 0:01:41.513447
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:430 - Average epoch time: 0:00:00
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:440 - Estimated total FLOPS: 19.9906 GFLOPS
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:442 - 
+Full reports saved to: results_local/perceiver_mnist_local_20250415_170344
+2025-04-15 17:05:44.583 | INFO     | examples.training.img_clf.full_train:generate_report:443 - ==================================================
+2025-04-15 17:05:44.583 | INFO     | __main__:main:193 - Local testing complete! Full report saved to: results_local/perceiver_mnist_local_20250415_170344/performance_report.json

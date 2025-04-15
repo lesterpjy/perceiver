@@ -85,7 +85,7 @@ class LitClassifier(LitPerceiverIO):
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.loss = nn.CrossEntropyLoss()
-        self.acc = tm.classification.accuracy.Accuracy()
+        self.acc = tm.classification.accuracy.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
 
     def step(self, batch):
         raise NotImplementedError()
@@ -117,7 +117,7 @@ class LitPerceiverClassifier(LitPerceiver):
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.loss = nn.CrossEntropyLoss()
-        self.acc = tm.classification.accuracy.Accuracy()
+        self.acc = tm.classification.accuracy.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
 
     def step(self, batch):
         raise NotImplementedError()

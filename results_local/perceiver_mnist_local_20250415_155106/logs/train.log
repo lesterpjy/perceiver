@@ -1,0 +1,63 @@
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 15:51:07.005 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 15:51:07.005 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 15:51:07.006 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 15:51:07.012 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 15:51:07.012 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 15:51:07.102 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 0/0 trainable parameters
+2025-04-15 15:51:07.102 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 15:51:07.103 | INFO     | __main__:main:160 - Model has 0/0 trainable parameters
+2025-04-15 15:51:07.103 | INFO     | examples.training.img_clf.full_train:create_trainer:448 - Enabling tensor cores with medium float32 precision
+2025-04-15 15:51:07.104 | INFO     | examples.training.img_clf.full_train:create_trainer:470 - Using 'auto' strategy for single GPU training
+2025-04-15 15:51:07.270 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 15:51:07.270 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 15:51:07.270 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 15:51:07.270 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 15:51:13.747 | WARNING  | examples.training.img_clf.full_train:configure_optimizers:304 - No trainable parameters found when configuring optimizer! Enabling gradients for all parameters.
+2025-04-15 15:51:13.749 | ERROR    | __main__:main:186 - Error during training: optimizer got an empty parameter list
+2025-04-15 15:51:13.758 | ERROR    | __main__:main:189 - Traceback (most recent call last):
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/test_perceiver_local.py", line 171, in main
+    trainer.fit(lit_model, datamodule=data)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 520, in fit
+    call._call_and_handle_interrupt(
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 559, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 911, in _run
+    self.strategy.setup(self)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/single_device.py", line 74, in setup
+    super().setup(trainer)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/strategy.py", line 148, in setup
+    self.setup_optimizers(trainer)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/strategy.py", line 138, in setup_optimizers
+    self.optimizers, self.lr_scheduler_configs = _init_optimizers_and_lr_schedulers(self.lightning_module)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 171, in _init_optimizers_and_lr_schedulers
+    optim_conf = call._call_lightning_module_hook(model.trainer, "configure_optimizers", pl_module=model)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 142, in _call_lightning_module_hook
+    output = fn(*args, **kwargs)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/examples/training/img_clf/full_train.py", line 311, in configure_optimizers
+    optimizer = create_optimizer(self.hparams, trainable_params)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/examples/training/img_clf/config_utils.py", line 156, in create_optimizer
+    return AdamW(parameters, lr=lr, weight_decay=weight_decay)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/optim/adamw.py", line 50, in __init__
+    super().__init__(params, defaults)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/optim/optimizer.py", line 187, in __init__
+    raise ValueError("optimizer got an empty parameter list")
+ValueError: optimizer got an empty parameter list
+

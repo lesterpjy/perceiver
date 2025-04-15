@@ -1,0 +1,36 @@
+activation_checkpointing: false
+activation_offloading: false
+batch_size: 32
+channels_last: true
+dataset_dir: .cache/mnist
+encoder: !!python/object:perceiver.model.vision.image_classifier.backend.ImageEncoderConfig
+  cross_attention_widening_factor: 1
+  dropout: 0.1
+  first_cross_attention_layer_shared: false
+  first_self_attention_block_shared: false
+  freeze: false
+  image_shape: !!python/tuple
+  - 28
+  - 28
+  - 1
+  init_scale: 0.1
+  num_cross_attention_heads: 1
+  num_cross_attention_layers: 1
+  num_cross_attention_qk_channels: null
+  num_cross_attention_v_channels: null
+  num_frequency_bands: 8
+  num_self_attention_blocks: 1
+  num_self_attention_heads: 8
+  num_self_attention_layers_per_block: 1
+  num_self_attention_qk_channels: null
+  num_self_attention_v_channels: null
+  self_attention_widening_factor: 1
+normalize: true
+num_classes: 10
+num_latent_channels: 32
+num_latents: 8
+num_workers: 0
+params: null
+pin_memory: false
+random_crop: null
+shuffle: true

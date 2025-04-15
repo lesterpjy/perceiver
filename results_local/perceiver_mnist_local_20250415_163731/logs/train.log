@@ -1,0 +1,75 @@
+2025-04-15 16:37:31.418 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 16:37:31.418 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 16:37:31.418 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 16:37:31.419 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 16:37:31.420 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 16:37:31.420 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 16:37:31.420 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 16:37:31.420 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 16:37:31.421 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 16:37:31.422 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 16:37:31.436 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 46,160/46,160 trainable parameters
+2025-04-15 16:37:31.437 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 16:37:31.437 | INFO     | __main__:main:160 - Model has 46,160/46,160 trainable parameters
+2025-04-15 16:37:31.438 | INFO     | examples.training.img_clf.full_train:create_trainer:448 - Enabling tensor cores with medium float32 precision
+2025-04-15 16:37:31.438 | INFO     | examples.training.img_clf.full_train:create_trainer:470 - Using 'auto' strategy for single GPU training
+2025-04-15 16:37:31.617 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 16:37:31.617 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 16:37:31.617 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 16:37:31.617 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 16:37:36.474 | INFO     | examples.training.img_clf.full_train:on_fit_start:85 - Model has 46,160 total parameters
+2025-04-15 16:37:36.474 | INFO     | examples.training.img_clf.full_train:on_fit_start:86 - Model has 46,160 trainable parameters
+2025-04-15 16:37:36.474 | INFO     | examples.training.img_clf.full_train:on_fit_start:122 - Starting training process, tracking compute stats...
+2025-04-15 16:37:37.270 | ERROR    | __main__:main:186 - Error during training: 'str' object has no attribute 'shape'
+2025-04-15 16:37:37.276 | ERROR    | __main__:main:189 - Traceback (most recent call last):
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/test_perceiver_local.py", line 171, in main
+    trainer.fit(lit_model, datamodule=data)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 520, in fit
+    call._call_and_handle_interrupt(
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 559, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 935, in _run
+    results = self._run_stage()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 976, in _run_stage
+    self._run_sanity_check()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1005, in _run_sanity_check
+    val_loop.run()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/utilities.py", line 177, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 115, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 375, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_kwargs.values())
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 288, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/strategy.py", line 378, in validation_step
+    return self.model.validation_step(*args, **kwargs)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/examples/training/img_clf/full_train.py", line 265, in validation_step
+    logits = self(x)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/perceiver/model/vision/image_classifier/lightning.py", line 43, in forward
+    return self.model(x)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/perceiver/model/vision/image_classifier/backend.py", line 129, in forward
+    latents = self.encoder(x, pad_mask=pad_mask)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/perceiver/model/core/modules.py", line 589, in forward
+    b, *_ = x.shape
+AttributeError: 'str' object has no attribute 'shape'
+

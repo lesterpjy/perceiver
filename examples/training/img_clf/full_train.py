@@ -26,7 +26,7 @@ from pytorch_lightning.loggers import TensorBoardLogger, CSVLogger
 from pytorch_lightning.strategies import DDPStrategy
 from pytorch_lightning.utilities import rank_zero_only
 import torch.nn.functional as F
-from torchmetrics.classification import MulticlassAccuracy, MulticlassF1Score, MulticlassConfusionMatrix
+from torchmetrics.classification import Accuracy, F1Score, ConfusionMatrix
 from fvcore.nn import FlopCountAnalysis, flop_count_table
 
 from perceiver.data.vision import MNISTDataModule
@@ -39,7 +39,7 @@ from perceiver.model.vision.image_classifier import (
 )
 
 # Import custom config utilities
-from config_utils import (
+from .config_utils import (
     load_config,
     save_config,
     update_config_with_args,
@@ -196,28 +196,45 @@ class ComputeStatsCallback(pl.Callback):
         return stats_path
 
 
-# Extend the LitImageClassifier with additional metrics and test functionality
 class EnhancedLitImageClassifier(LitImageClassifier):
-    def __init__(self, config):
-        super().__init__(config)
-        # FIX: Ensure all parameters require gradients after initialization
-        for param in self.parameters():
-            param.requires_grad = True
+    def __init__(
+        self,
+        encoder,
+        num_latents=None,
+        num_latent_channels=None,
+        num_classes=None,
+        activation_checkpointing=False,
+        activation_offloading=False,
+        params=None,
+        **kwargs,
+    ):
+        # Call parent constructor
+        super().__init__(
+            encoder=encoder,
+            num_latents=num_latents,
+            num_latent_channels=num_latent_channels,
+            num_classes=num_classes,
+            activation_checkpointing=activation_checkpointing,
+            activation_offloading=activation_offloading,
+            params=params,
+            **kwargs,
+        )
 
-        self.train_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
-        self.val_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
-        self.test_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
+        # Use latest torchmetrics API
+        self.train_acc = Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.val_acc = Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.test_acc = Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
 
-        self.train_f1 = MulticlassF1Score(num_classes=self.config.num_classes)
-        self.val_f1 = MulticlassF1Score(num_classes=self.config.num_classes)
-        self.test_f1 = MulticlassF1Score(num_classes=self.config.num_classes)
+        self.train_f1 = F1Score(task="multiclass", num_classes=self.hparams.num_classes)
+        self.val_f1 = F1Score(task="multiclass", num_classes=self.hparams.num_classes)
+        self.test_f1 = F1Score(task="multiclass", num_classes=self.hparams.num_classes)
 
-        self.test_confusion = MulticlassConfusionMatrix(num_classes=self.config.num_classes)
+        self.test_confusion = ConfusionMatrix(task="multiclass", num_classes=self.hparams.num_classes)
 
-        # Register an example input for FLOPS calculation
-        self.example_input_array = torch.zeros(1, *self.config.encoder.image_shape)
+        # CHANGE: Use self.hparams.encoder instead of self.config.encoder
+        self.example_input_array = torch.zeros(1, *self.hparams.encoder.image_shape)
 
-        logger.debug(f"Enhanced model initialized with num_classes={self.config.num_classes}")
+        logger.debug(f"Enhanced model initialized with num_classes={self.hparams.num_classes}")
 
         # Log trainable parameter count
         trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
@@ -225,7 +242,20 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         logger.info(f"Model initialized with {trainable_params:,}/{total_params:,} trainable parameters")
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
+        # Handle both dict format and tuple format
+        if isinstance(batch, dict) and "image" in batch and "label" in batch:
+            x, y = batch["image"], batch["label"]
+        elif isinstance(batch, (list, tuple)) and len(batch) == 2:
+            x, y = batch
+        else:
+            raise ValueError(
+                f"Unexpected batch format: {type(batch)}. Expected dict with 'image'/'label' keys or tuple of (image, label)"
+            )
+
+        # Ensure x is a tensor
+        if not hasattr(x, "shape"):
+            raise TypeError(f"Input x must be a tensor with shape attribute, got {type(x)}")
+
         logits = self(x)
         loss = F.cross_entropy(logits, y)
         preds = torch.argmax(logits, dim=1)
@@ -244,7 +274,19 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
+        # Handle both dict format and tuple format
+        if isinstance(batch, dict) and "image" in batch and "label" in batch:
+            x, y = batch["image"], batch["label"]
+        elif isinstance(batch, (list, tuple)) and len(batch) == 2:
+            x, y = batch
+        else:
+            raise ValueError(
+                f"Unexpected batch format: {type(batch)}. Expected dict with 'image'/'label' keys or tuple of (image, label)"
+            )
+
+        # Ensure x is a tensor
+        if not hasattr(x, "shape"):
+            raise TypeError(f"Input x must be a tensor with shape attribute, got {type(x)}")
         logits = self(x)
         loss = F.cross_entropy(logits, y)
         preds = torch.argmax(logits, dim=1)
@@ -260,7 +302,19 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         return loss
 
     def test_step(self, batch, batch_idx):
-        x, y = batch
+        # Handle both dict format and tuple format
+        if isinstance(batch, dict) and "image" in batch and "label" in batch:
+            x, y = batch["image"], batch["label"]
+        elif isinstance(batch, (list, tuple)) and len(batch) == 2:
+            x, y = batch
+        else:
+            raise ValueError(
+                f"Unexpected batch format: {type(batch)}. Expected dict with 'image'/'label' keys or tuple of (image, label)"
+            )
+
+        # Ensure x is a tensor
+        if not hasattr(x, "shape"):
+            raise TypeError(f"Input x must be a tensor with shape attribute, got {type(x)}")
         logits = self(x)
         loss = F.cross_entropy(logits, y)
         preds = torch.argmax(logits, dim=1)
@@ -300,17 +354,19 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         }
 
     @classmethod
-    def create(cls, model_config, hparams=None):
+    def create(cls, config, hparams=None):
         """
         Create the model with the given configuration and hyperparameters.
+        Properly passes arguments to match the parent class constructor.
         """
-        model = cls(model_config)
+        # Use the parent's create method to ensure correct initialization
+        model = super().create(config)
 
-        # Store hyperparameters for optimizer configuration
+        # Then add your customizations
         if hparams:
-            model.hparams = hparams
+            model.hparams.update(hparams)
 
-        # FIX: Ensure all parameters require gradients after creation
+        # Ensure all parameters require gradients
         for param in model.parameters():
             param.requires_grad = True
 
@@ -566,6 +622,8 @@ def main():
 
     # Create model configuration
     model_config = create_model_config(config, data)
+    logger.info("Creating model configuration...")
+    logger.info(f"Model configuration: {model_config}")
 
     # Initialize enhanced model
     lit_model = EnhancedLitImageClassifier.create(model_config, config)

@@ -1,0 +1,75 @@
+2025-04-15 15:41:09.108 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 15:41:09.109 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 15:41:09.109 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 15:41:09.109 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 15:41:09.109 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 15:41:09.109 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 15:41:09.109 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 15:41:09.110 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 15:41:09.111 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 15:41:09.111 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 15:41:09.111 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 15:41:09.111 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 15:41:09.115 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 15:41:09.115 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 15:41:09.132 | INFO     | examples.training.img_clf.full_train:__init__:246 - Model initialized with 0/0 trainable parameters
+2025-04-15 15:41:09.132 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 15:41:09.132 | INFO     | __main__:main:160 - Model has 0/0 trainable parameters
+2025-04-15 15:41:09.133 | INFO     | examples.training.img_clf.full_train:create_trainer:452 - Enabling tensor cores with medium float32 precision
+2025-04-15 15:41:09.133 | INFO     | examples.training.img_clf.full_train:create_trainer:474 - Using 'auto' strategy for single GPU training
+2025-04-15 15:41:09.388 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 15:41:09.388 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 15:41:09.389 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 15:41:09.389 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 15:41:17.635 | ERROR    | __main__:main:186 - Error during training: Expected metric state to be either a Tensoror a list of Tensor, but encountered None
+2025-04-15 15:41:17.641 | ERROR    | __main__:main:189 - Traceback (most recent call last):
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 559, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 911, in _run
+    self.strategy.setup(self)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/single_device.py", line 73, in setup
+    self.model_to_device()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/single_device.py", line 70, in model_to_device
+    self.model.to(self.root_device)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/lightning_fabric/utilities/device_dtype_mixin.py", line 54, in to
+    return super().to(*args, **kwargs)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1145, in to
+    return self._apply(convert)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 797, in _apply
+    module._apply(fn)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torchmetrics/metric.py", line 641, in _apply
+    raise TypeError(
+TypeError: Expected metric state to be either a Tensoror a list of Tensor, but encountered None
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/lesterpjy/Desktop/uva/FOMO/perceiver/test_perceiver_local.py", line 171, in main
+    trainer.fit(lit_model, datamodule=data)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 520, in fit
+    call._call_and_handle_interrupt(
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py", line 68, in _call_and_handle_interrupt
+    trainer._teardown()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 958, in _teardown
+    self.strategy.teardown()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/pytorch_lightning/strategies/strategy.py", line 475, in teardown
+    self.lightning_module.cpu()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/lightning_fabric/utilities/device_dtype_mixin.py", line 78, in cpu
+    return super().cpu()
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 954, in cpu
+    return self._apply(lambda t: t.cpu())
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torch/nn/modules/module.py", line 797, in _apply
+    module._apply(fn)
+  File "/Users/lesterpjy/opt/anaconda3/envs/perceiver-io/lib/python3.9/site-packages/torchmetrics/metric.py", line 641, in _apply
+    raise TypeError(
+TypeError: Expected metric state to be either a Tensoror a list of Tensor, but encountered None
+

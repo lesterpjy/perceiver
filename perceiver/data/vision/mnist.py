@@ -78,6 +78,19 @@ class MNISTDataModule(pl.LightningDataModule):
             pin_memory=self.hparams.pin_memory,
         )
 
+    def test_dataloader(self):
+        """
+        Returns the test DataLoader for MNIST.
+        For simplicity, we're reusing the validation dataset.
+        """
+        return DataLoader(
+            self.ds_valid,
+            shuffle=False,
+            batch_size=self.hparams.batch_size,
+            num_workers=self.hparams.num_workers,
+            pin_memory=self.hparams.pin_memory,
+        )
+
 
 def mnist_transform(normalize: bool = True, channels_last: bool = True, random_crop: Optional[int] = None):
     transform_list = []

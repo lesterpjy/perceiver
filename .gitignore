@@ -2,3 +2,9 @@
 dist/
 
 .ruff_cache/
+
+.DS_Store
+
+__pycache__
+
+.cache

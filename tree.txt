@@ -1,0 +1,227 @@
+.
+├── CITATION.cff
+├── Dockerfile
+├── docs
+│   ├── building-blocks.md
+│   ├── dataset-preproc.md
+│   ├── docker-image.md
+│   ├── images
+│   │   ├── library-design-small.jpg
+│   │   ├── library-design.jpg
+│   │   ├── optical-flow.gif
+│   │   ├── perceiver-ar.png
+│   │   ├── perceiver-io.png
+│   │   ├── perceiver.png
+│   │   ├── small-perceiver-ar.png
+│   │   ├── small-perceiver-io.png
+│   │   └── small-perceiver.png
+│   ├── library-design.md
+│   ├── model-construction.md
+│   ├── pretrained-models.md
+│   └── training-examples.md
+├── environment-mac.yml
+├── environment.yml
+├── examples
+│   ├── __init__.py
+│   ├── convert.py
+│   ├── inference.ipynb
+│   ├── scaling
+│   │   ├── __init__.py
+│   │   └── clm
+│   │       ├── __init__.py
+│   │       ├── article.ipynb
+│   │       ├── article.py
+│   │       ├── data
+│   │       │   ├── estimates
+│   │       │   │   ├── approach_1.csv
+│   │       │   │   └── approach_2.csv
+│   │       │   └── validation
+│   │       │       ├── run-logs-0.8.0_scaling-1_version_0-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-1_version_1-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-1_version_2-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2a_version_0-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2a_version_1-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2a_version_2-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2a_version_3-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2a_version_4-tag-val_loss.csv
+│   │       │       ├── run-logs-0.8.0_scaling-2b_version_0-tag-val_loss.csv
+│   │       │       └── run-logs-0.8.0_scaling-2b_version_1-tag-val_loss.csv
+│   │       ├── images
+│   │       │   └── perceiver-ar.png
+│   │       ├── scaling
+│   │       │   ├── __init__.py
+│   │       │   ├── flops.py
+│   │       │   └── laws.py
+│   │       ├── train.md
+│   │       ├── train.py
+│   │       └── update.md
+│   └── training
+│       ├── __init__.py
+│       ├── clm
+│       │   ├── prep.sh
+│       │   ├── train_fsdp.sh
+│       │   ├── train.py
+│       │   └── train.sh
+│       ├── download_checkpoints.sh
+│       ├── img_clf
+│       │   ├── config_utils.py
+│       │   ├── full_train.py
+│       │   ├── perceiver_config.yml
+│       │   ├── train.py
+│       │   ├── train.sh
+│       │   └── valid.sh
+│       ├── mlm
+│       │   ├── prep.sh
+│       │   ├── train.py
+│       │   └── train.sh
+│       ├── sam
+│       │   ├── giantmidi
+│       │   │   ├── prep.sh
+│       │   │   ├── train.py
+│       │   │   └── train.sh
+│       │   └── maestrov3
+│       │       ├── prep.sh
+│       │       ├── train.py
+│       │       └── train.sh
+│       └── txt_clf
+│           ├── prep.sh
+│           ├── train_all.py
+│           ├── train_all.sh
+│           ├── train_dec.py
+│           ├── train_dec.sh
+│           ├── valid_all.sh
+│           └── valid_dec.sh
+├── LICENSE
+├── perceiver
+│   ├── __init__.py
+│   ├── data
+│   │   ├── __init__.py
+│   │   ├── audio
+│   │   │   ├── __init__.py
+│   │   │   ├── giantmidi_piano.py
+│   │   │   ├── maestro_v3.py
+│   │   │   ├── midi_processor.py
+│   │   │   ├── symbolic.py
+│   │   │   └── utils.py
+│   │   ├── text
+│   │   │   ├── __init__.py
+│   │   │   ├── bookcorpus.py
+│   │   │   ├── bookcorpusopen.py
+│   │   │   ├── c4.py
+│   │   │   ├── collator.py
+│   │   │   ├── common.py
+│   │   │   ├── enwik8.py
+│   │   │   ├── imdb.py
+│   │   │   ├── utils.py
+│   │   │   ├── wikipedia.py
+│   │   │   └── wikitext.py
+│   │   └── vision
+│   │       ├── __init__.py
+│   │       ├── common.py
+│   │       ├── imagenet.py
+│   │       ├── mnist.py
+│   │       ├── optical_flow.py
+│   │       └── video_utils.py
+│   ├── model
+│   │   ├── __init__.py
+│   │   ├── audio
+│   │   │   ├── __init__.py
+│   │   │   └── symbolic
+│   │   │       ├── __init__.py
+│   │   │       ├── backend.py
+│   │   │       ├── huggingface.py
+│   │   │       └── lightning.py
+│   │   ├── core
+│   │   │   ├── __init__.py
+│   │   │   ├── adapter.py
+│   │   │   ├── classifier.py
+│   │   │   ├── config.py
+│   │   │   ├── huggingface.py
+│   │   │   ├── lightning.py
+│   │   │   ├── modules.py
+│   │   │   ├── position.py
+│   │   │   └── utils.py
+│   │   ├── text
+│   │   │   ├── __init__.py
+│   │   │   ├── classifier
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── backend.py
+│   │   │   │   ├── huggingface.py
+│   │   │   │   └── lightning.py
+│   │   │   ├── clm
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── backend.py
+│   │   │   │   ├── huggingface.py
+│   │   │   │   └── lightning.py
+│   │   │   ├── common
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── backend.py
+│   │   │   │   └── huggingface.py
+│   │   │   └── mlm
+│   │   │       ├── __init__.py
+│   │   │       ├── backend.py
+│   │   │       ├── huggingface.py
+│   │   │       ├── lightning.py
+│   │   │       └── utils.py
+│   │   └── vision
+│   │       ├── __init__.py
+│   │       ├── image_classifier
+│   │       │   ├── __init__.py
+│   │       │   ├── backend.py
+│   │       │   ├── huggingface.py
+│   │       │   └── lightning.py
+│   │       └── optical_flow
+│   │           ├── __init__.py
+│   │           ├── backend.py
+│   │           └── huggingface.py
+│   └── scripts
+│       ├── __init__.py
+│       ├── audio
+│       │   ├── __init__.py
+│       │   ├── preproc.py
+│       │   └── symbolic.py
+│       ├── cli.py
+│       ├── lrs.py
+│       ├── text
+│       │   ├── __init__.py
+│       │   ├── classifier.py
+│       │   ├── clm_fsdp.py
+│       │   ├── clm.py
+│       │   ├── mlm.py
+│       │   └── preproc.py
+│       ├── trainer.yaml
+│       └── vision
+│           ├── __init__.py
+│           └── image_classifier.py
+├── poetry.lock
+├── pyproject.toml
+├── README.md
+├── snellius_jobs
+│   ├── full_train.job
+│   ├── outfiles
+│   │   └── temp.out
+│   └── train_perceiver.job
+├── tasks.py
+├── tests
+│   ├── causal_language_model_generate_test.py
+│   ├── causal_language_model_pipeline_test.py
+│   ├── conftest.py
+│   ├── data
+│   │   └── audio_prompt_1.mid
+│   ├── image_classifier_convert_test.py
+│   ├── image_classifier_mnist_test.py
+│   ├── kv_cache_test.py
+│   ├── mask_filler_test.py
+│   ├── masked_language_model_convert_test.py
+│   ├── masked_language_model_filler_test.py
+│   ├── optical_flow_pipeline_test.py
+│   ├── optical_flow_test.py
+│   ├── symbolic_audio_model_generate_test.py
+│   ├── symbolic_audio_model_pipeline_test.py
+│   ├── text_classifier_imdb_test.py
+│   ├── text_classifier_test.py
+│   ├── text_data_module_test.py
+│   └── utils.py
+└── tree.txt
+
+44 directories, 181 files
