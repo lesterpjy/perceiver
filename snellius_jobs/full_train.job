@@ -21,41 +21,9 @@ cd ~/group-michal/perceiver/
 echo "Activating perceiver-io environment..."
 source activate perceiver-io
 
-# Fix markupsafe compatibility issue
-echo "Fixing dependency compatibility issues..."
-pip install markupsafe==2.0.1
-
-# Configure Poetry to not create a separate virtual environment
-export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-export POETRY_VIRTUALENVS_CREATE=false
-
 # Install critical dependencies directly with pip
-echo "Installing critical dependencies..."
-pip install pytorch-lightning>=2.0 torch>=2.0 torchmetrics==0.9.3 einops>=0.4 
-pip install transformers==4.28.0 datasets>=2.4 torchvision>=0.15 opencv-python>=4.6
-
-# Install additional packages
-echo "Installing additional packages..."
-pip install matplotlib>=3.5 seaborn>=0.12 pandas>=1.4 fvcore>=0.1.5 tensorboard>=2.10 loguru>=0.6.0 pyyaml>=6.0
-
-# Add setup.py for editable installs if it doesn't exist
-if [ ! -f setup.py ]; then
-    echo "Creating setup.py for editable install..."
-    cat > setup.py << 'EOL'
-#!/usr/bin/env python
-from setuptools import setup, find_packages
-
-if __name__ == "__main__":
-    setup(
-        name="perceiver-io",
-        version="0.11.1",
-        description="Perceiver IO",
-        author="Martin Krasser, Christoph Stumpf",
-        packages=find_packages(),
-        python_requires=">=3.8,<3.11",
-    )
-EOL
-fi
+echo "Installing dependencies..."
+pip install -r local_requirements.txt
 
 # Install the project in development mode
 echo "Installing the project in development mode..."
