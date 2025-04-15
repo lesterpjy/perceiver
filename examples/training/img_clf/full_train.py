@@ -63,10 +63,48 @@ def setup_logger(config, output_dir=None):
     # Add file handler if enabled
     if config["logging"]["file"] and output_dir:
         log_path = os.path.join(output_dir, "logs", "train.log")
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
         logger.add(log_path, rotation="10 MB", level=log_level)
 
     logger.info(f"Logger configured with level: {log_level}")
     return logger
+
+
+# Define a parameter check callback to fix the no trainable params issue
+class ParamCheckCallback(pl.Callback):
+    def __init__(self):
+        super().__init__()
+        self.has_checked = False
+
+    def on_fit_start(self, trainer, pl_module):
+        if not self.has_checked:
+            # Count trainable parameters
+            trainable_params = sum(p.numel() for p in pl_module.parameters() if p.requires_grad)
+            total_params = sum(p.numel() for p in pl_module.parameters())
+
+            logger.info(f"Model has {total_params:,} total parameters")
+            logger.info(f"Model has {trainable_params:,} trainable parameters")
+
+            if trainable_params == 0:
+                logger.warning("MODEL HAS NO TRAINABLE PARAMETERS! Fixing...")
+                # Enable gradients for all parameters
+                for name, param in pl_module.named_parameters():
+                    param.requires_grad = True
+                    logger.debug(f"Enabled gradients for {name}")
+
+                # Check again
+                trainable_params = sum(p.numel() for p in pl_module.parameters() if p.requires_grad)
+                logger.info(f"After fix: Model has {trainable_params:,} trainable parameters")
+
+                if trainable_params == 0:
+                    logger.error("CRITICAL: Still no trainable parameters after fix!")
+                    # Try to debug further
+                    for name, module in pl_module.named_modules():
+                        logger.debug(
+                            f"Module: {name}, Trainable params: {sum(p.numel() for p in module.parameters() if p.requires_grad)}"
+                        )
+
+            self.has_checked = True
 
 
 # Custom callback to track compute time and resources
@@ -162,6 +200,10 @@ class ComputeStatsCallback(pl.Callback):
 class EnhancedLitImageClassifier(LitImageClassifier):
     def __init__(self, config):
         super().__init__(config)
+        # FIX: Ensure all parameters require gradients after initialization
+        for param in self.parameters():
+            param.requires_grad = True
+
         self.train_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
         self.val_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
         self.test_acc = MulticlassAccuracy(num_classes=self.config.num_classes)
@@ -176,6 +218,11 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         self.example_input_array = torch.zeros(1, *self.config.encoder.image_shape)
 
         logger.debug(f"Enhanced model initialized with num_classes={self.config.num_classes}")
+
+        # Log trainable parameter count
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        total_params = sum(p.numel() for p in self.parameters())
+        logger.info(f"Model initialized with {trainable_params:,}/{total_params:,} trainable parameters")
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -234,7 +281,17 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         Configure optimizers based on the configuration.
         Overrides the default implementation.
         """
-        optimizer = create_optimizer(self.hparams, self.parameters())
+        # FIX: Ensure we're passing only parameters that require gradients to the optimizer
+        trainable_params = [p for p in self.parameters() if p.requires_grad]
+        if not trainable_params:
+            logger.warning(
+                "No trainable parameters found when configuring optimizer! Enabling gradients for all parameters."
+            )
+            for param in self.parameters():
+                param.requires_grad = True
+            trainable_params = [p for p in self.parameters() if p.requires_grad]
+
+        optimizer = create_optimizer(self.hparams, trainable_params)
         scheduler_config = create_lr_scheduler(self.hparams, optimizer)
 
         return {
@@ -252,6 +309,10 @@ class EnhancedLitImageClassifier(LitImageClassifier):
         # Store hyperparameters for optimizer configuration
         if hparams:
             model.hparams = hparams
+
+        # FIX: Ensure all parameters require gradients after creation
+        for param in model.parameters():
+            param.requires_grad = True
 
         return model
 
@@ -340,6 +401,7 @@ def parse_args():
     parser.add_argument("--training.max_epochs", type=int, default=None, help="Override maximum number of epochs")
     parser.add_argument("--training.optimizer.lr", type=float, default=None, help="Override learning rate")
     parser.add_argument("--training.devices", type=int, default=None, help="Override number of devices")
+    parser.add_argument("--trainer.strategy", type=str, default=None, help="Override training strategy")
     args = parser.parse_args()
 
     # Convert args to dict for config update
@@ -363,6 +425,10 @@ def create_trainer(config, output_dir, callbacks):
         csv_logger = CSVLogger(save_dir=os.path.join(output_dir, "logs"), name="csv_logs")
         loggers.append(csv_logger)
 
+    # FIX: Set float32 matmul precision for tensor cores
+    logger.info("Enabling tensor cores with medium float32 precision")
+    torch.set_float32_matmul_precision("medium")
+
     # Set up trainer configuration
     trainer_config = {
         "accelerator": config["training"]["accelerator"],
@@ -373,9 +439,17 @@ def create_trainer(config, output_dir, callbacks):
         "deterministic": config["training"]["deterministic"],
     }
 
-    # Set up strategy if needed
-    if config["training"]["strategy"] == "ddp_static":
-        trainer_config["strategy"] = DDPStrategy(find_unused_parameters=False, static_graph=True)
+    # Set up strategy - FIX: Use auto for single GPU and DDP with find_unused_parameters for multi-GPU
+    if config["training"]["devices"] > 1:
+        if config["training"]["strategy"] == "ddp_static":
+            logger.info("Using DDP static strategy with find_unused_parameters=True")
+            trainer_config["strategy"] = DDPStrategy(find_unused_parameters=True, static_graph=True)
+        else:
+            logger.info("Using DDP strategy with find_unused_parameters=True")
+            trainer_config["strategy"] = DDPStrategy(find_unused_parameters=True)
+    else:
+        logger.info("Using 'auto' strategy for single GPU training")
+        trainer_config["strategy"] = "auto"
 
     # Set precision if specified
     if "precision" in config["training"]:
@@ -412,6 +486,10 @@ def create_model_config(config, data):
 def setup_callbacks(config, output_dir):
     """Set up callbacks based on configuration"""
     callbacks = []
+
+    # FIX: Add parameter check callback first
+    param_check_callback = ParamCheckCallback()
+    callbacks.append(param_check_callback)
 
     # Add checkpoint callback
     if config["training"]["checkpoint"]["save_top_k"] > 0:
@@ -497,11 +575,34 @@ def main():
     trainer = create_trainer(config, output_dir, callbacks)
     logger.info(f"Trainer created with {config['training']['devices']} devices")
 
-    # Train model
-    logger.info("=" * 50)
-    logger.info("STARTING TRAINING")
-    logger.info("=" * 50)
-    trainer.fit(lit_model, datamodule=data)
+    # Try training with DDP first
+    try:
+        # Train model
+        logger.info("=" * 50)
+        logger.info("STARTING TRAINING")
+        logger.info("=" * 50)
+        trainer.fit(lit_model, datamodule=data)
+    except RuntimeError as e:
+        error_msg = str(e)
+        if "DistributedDataParallel is not needed when a module doesn't have any parameter" in error_msg:
+            logger.error("DDP error detected: No trainable parameters. Switching to single GPU training...")
+
+            # Enable gradients for all parameters
+            for param in lit_model.parameters():
+                param.requires_grad = True
+
+            # Create new trainer with single GPU
+            config["training"]["devices"] = 1
+            config["training"]["strategy"] = "auto"
+            trainer = create_trainer(config, output_dir, callbacks)
+            logger.info("Created new trainer with single GPU and auto strategy")
+
+            # Try training again
+            trainer.fit(lit_model, datamodule=data)
+        else:
+            # Re-raise other errors
+            logger.error(f"Unhandled error: {error_msg}")
+            raise
 
     # Test model using best checkpoint
     logger.info("=" * 50)

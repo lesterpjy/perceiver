@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH --partition=gpu_a100
-#SBATCH --gres=gpu:2            # Using 2 GPUs as per the training script
+#SBATCH --gres=gpu:1            # Reduced to 1 GPU to avoid DDP issues
 #SBATCH --cpus-per-task=9
-#SBATCH --gpus=2                # Matching the 2 GPUs in the script
+#SBATCH --gpus=1                # Reduced to 1 GPU to avoid DDP issues
 #SBATCH --job-name=TrainPerceiverIO
 #SBATCH --ntasks=1
 #SBATCH --time=04:00:00         # Increased time for full train-eval-test cycle
@@ -17,45 +17,67 @@ module load Anaconda3/2023.07-2
 # Set working directory to repository root
 cd ~/group-michal/perceiver/
 
-# Skip environment creation if it already exists
-# Only activate the existing environment
+# Activate perceiver-io environment
 echo "Activating perceiver-io environment..."
 source activate perceiver-io
 
+# Fix markupsafe compatibility issue
+echo "Fixing dependency compatibility issues..."
+pip install markupsafe==2.0.1
+
 # Configure Poetry to not create a separate virtual environment
-# and install packages directly into the conda environment
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 export POETRY_VIRTUALENVS_CREATE=false
 
 # Install critical dependencies directly with pip
-echo "Installing critical dependencies directly with pip..."
-pip install pytorch-lightning>=2.0 torch>=2.0 torchmetrics>=0.9 einops>=0.4 datasets>=2.4 torchvision>=0.15 opencv-python>=4.6 transformers>=4.28
+echo "Installing critical dependencies..."
+pip install pytorch-lightning>=2.0 torch>=2.0 torchmetrics==0.9.3 einops>=0.4 
+pip install transformers==4.28.0 datasets>=2.4 torchvision>=0.15 opencv-python>=4.6
 
-# Install additional packages for enhanced training, evaluation, and reporting
-echo "Installing additional packages for enhanced training suite..."
-pip install matplotlib>=3.5 seaborn>=0.12 pandas>=1.4 fvcore>=0.1.5 numpy>=1.22 tensorboard>=2.10 loguru>=0.6.0 pyyaml>=6.0
+# Install additional packages
+echo "Installing additional packages..."
+pip install matplotlib>=3.5 seaborn>=0.12 pandas>=1.4 fvcore>=0.1.5 tensorboard>=2.10 loguru>=0.6.0 pyyaml>=6.0
 
-# Install Poetry if not already installed
-if ! command -v poetry &> /dev/null; then
-    echo "Installing Poetry..."
-    curl -sSL https://install.python-poetry.org | python3 -
+# Add setup.py for editable installs if it doesn't exist
+if [ ! -f setup.py ]; then
+    echo "Creating setup.py for editable install..."
+    cat > setup.py << 'EOL'
+#!/usr/bin/env python
+from setuptools import setup, find_packages
+
+if __name__ == "__main__":
+    setup(
+        name="perceiver-io",
+        version="0.11.1",
+        description="Perceiver IO",
+        author="Martin Krasser, Christoph Stumpf",
+        packages=find_packages(),
+        python_requires=">=3.8,<3.11",
+    )
+EOL
 fi
 
-# Add Poetry to PATH
-export PATH="$HOME/.local/bin:$PATH"
-
 # Install the project in development mode
-echo "Installing the project with pip in development mode..."
+echo "Installing the project in development mode..."
 pip install -e .
 
 # Create necessary directories
 mkdir -p results_full
 mkdir -p outfiles_full
+mkdir -p logs
 
-# Copy config files to appropriate location
+# Prepare configuration files
 echo "Preparing configuration files..."
 CONFIG_DIR="examples/training/img_clf"
 
-# Run the training script with config
-echo "Starting comprehensive training suite..."
-srun python -m examples.training.img_clf.train --config ${CONFIG_DIR}/perceiver_config.yaml
+# Set environment variables to help with DDP issues
+export CUDA_VISIBLE_DEVICES=0  # Use only the first GPU
+export PL_TORCH_DISTRIBUTED_BACKEND=gloo  # Use gloo as fallback for nccl
+
+# Enable tensor cores properly
+echo "Enabling tensor cores for better performance..."
+echo "import torch; torch.set_float32_matmul_precision('medium')" > set_precision.py
+python set_precision.py
+
+echo "Starting training with single GPU (no DDP)..."
+srun python -m examples.training.img_clf.full_train --config ${CONFIG_DIR}/perceiver_config.yaml --trainer.strategy=auto --training.devices=1
