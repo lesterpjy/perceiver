@@ -24,7 +24,7 @@ def configure_optimizers(self):
     }
 
 
-setattr(LitImageClassifier, "configure_optimizers", configure_optimizers),
+setattr(LitImageClassifier, "configure_optimizers", configure_optimizers)
 
 data = MNISTDataModule(batch_size=128)
 
