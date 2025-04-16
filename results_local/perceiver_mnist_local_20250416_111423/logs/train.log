@@ -1,0 +1,65 @@
+2025-04-16 11:14:23.834 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-16 11:14:23.836 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-16 11:14:23.836 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-16 11:14:23.836 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-16 11:14:23.836 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-16 11:14:23.852 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 46,292/46,292 trainable parameters
+2025-04-16 11:14:23.852 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-16 11:14:23.852 | INFO     | __main__:main:160 - Model has 46,292/46,292 trainable parameters
+2025-04-16 11:14:23.852 | INFO     | examples.training.img_clf.full_train:create_trainer:485 - Enabling tensor cores with medium float32 precision
+2025-04-16 11:14:23.852 | INFO     | examples.training.img_clf.full_train:create_trainer:507 - Using 'auto' strategy for single GPU training
+2025-04-16 11:14:23.867 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-16 11:14:23.867 | INFO     | __main__:main:168 - ==================================================
+2025-04-16 11:14:23.867 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-16 11:14:23.867 | INFO     | __main__:main:170 - ==================================================
+2025-04-16 11:14:37.870 | INFO     | examples.training.img_clf.full_train:on_fit_start:85 - Model has 46,292 total parameters
+2025-04-16 11:14:37.870 | INFO     | examples.training.img_clf.full_train:on_fit_start:86 - Model has 46,292 trainable parameters
+2025-04-16 11:14:37.870 | INFO     | examples.training.img_clf.full_train:on_fit_start:122 - Starting training process, tracking compute stats...
+2025-04-16 11:14:38.171 | ERROR    | __main__:main:196 - Error during training: Target 49 is out of bounds.
+2025-04-16 11:14:38.186 | ERROR    | __main__:main:199 - Traceback (most recent call last):
+  File "C:\Users\devin\School\fomo\perceiver\cifar_perceiver_test.py", line 171, in main
+    trainer.fit(lit_model, datamodule=data)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 561, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\call.py", line 48, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 599, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1012, in _run
+    results = self._run_stage()
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1054, in _run_stage
+    self._run_sanity_check()
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1083, in _run_sanity_check
+    val_loop.run()
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\loops\utilities.py", line 179, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 145, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 437, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\call.py", line 328, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 412, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "C:\Users\devin\School\fomo\perceiver\examples\training\img_clf\full_train.py", line 291, in validation_step
+    loss = F.cross_entropy(logits, y)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\torch\nn\functional.py", line 3086, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(input, target, weight, _Reduction.get_enum(reduction), ignore_index, label_smoothing)
+IndexError: Target 49 is out of bounds.
+

@@ -1,0 +1,58 @@
+2025-04-15 21:05:59.702 | INFO     | examples.training.img_clf.full_train:setup_logger:69 - Logger configured with level: INFO
+2025-04-15 21:05:59.702 | INFO     | __main__:main:130 - Starting Perceiver IO local testing with config from ./local_config.yaml
+2025-04-15 21:05:59.702 | INFO     | examples.training.img_clf.config_utils:log_config:115 - Configuration:
+2025-04-15 21:05:59.702 | INFO     | examples.training.img_clf.config_utils:log_config:116 - Experiment: perceiver_mnist_local
+2025-04-15 21:05:59.702 | INFO     | examples.training.img_clf.config_utils:log_config:117 - Description: Local CPU test of MNIST classification using Perceiver IO
+2025-04-15 21:05:59.704 | INFO     | examples.training.img_clf.config_utils:log_config:120 - Model architecture:
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:121 -   Num latents: 8
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:122 -   Num latent channels: 32
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:123 -   Num classes: 10
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:124 -   Num frequency bands: 8
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:125 -   Cross attention layers: 1
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:126 -   Self attention blocks: 1
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:129 - Training settings:
+2025-04-15 21:05:59.706 | INFO     | examples.training.img_clf.config_utils:log_config:130 -   Max epochs: 1
+2025-04-15 21:05:59.708 | INFO     | examples.training.img_clf.config_utils:log_config:131 -   Batch size: 32
+2025-04-15 21:05:59.708 | INFO     | examples.training.img_clf.config_utils:log_config:132 -   Learning rate: 0.001
+2025-04-15 21:05:59.708 | INFO     | examples.training.img_clf.config_utils:log_config:133 -   Weight decay: 0.0001
+2025-04-15 21:05:59.709 | INFO     | examples.training.img_clf.config_utils:log_config:134 -   Devices: 1
+2025-04-15 21:05:59.709 | INFO     | examples.training.img_clf.config_utils:log_config:135 -   Precision: 32
+2025-04-15 21:05:59.724 | INFO     | __main__:main:139 - Setting random seed to 42
+2025-04-15 21:05:59.724 | INFO     | __main__:main:145 - Initialized MNIST data module with batch_size=32, num_workers=0
+2025-04-15 21:05:59.879 | INFO     | examples.training.img_clf.full_train:__init__:242 - Model initialized with 46,160/46,160 trainable parameters
+2025-04-15 21:05:59.879 | INFO     | __main__:main:155 - Model initialized successfully
+2025-04-15 21:05:59.883 | INFO     | __main__:main:160 - Model has 46,160/46,160 trainable parameters
+2025-04-15 21:05:59.891 | INFO     | examples.training.img_clf.full_train:create_trainer:485 - Enabling tensor cores with medium float32 precision
+2025-04-15 21:05:59.891 | INFO     | examples.training.img_clf.full_train:create_trainer:507 - Using 'auto' strategy for single GPU training
+2025-04-15 21:05:59.992 | INFO     | __main__:main:164 - Trainer created with 1 devices
+2025-04-15 21:05:59.992 | INFO     | __main__:main:168 - ==================================================
+2025-04-15 21:05:59.992 | INFO     | __main__:main:169 - STARTING TRAINING
+2025-04-15 21:05:59.994 | INFO     | __main__:main:170 - ==================================================
+2025-04-15 21:06:16.958 | ERROR    | __main__:main:196 - Error during training: No module named 's3fs'
+2025-04-15 21:06:16.965 | ERROR    | __main__:main:199 - Traceback (most recent call last):
+  File "C:\Users\devin\School\fomo\perceiver\test_perceiver_local.py", line 171, in main
+    trainer.fit(lit_model, datamodule=data)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 561, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\call.py", line 48, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 599, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 988, in _run
+    self.strategy.setup(self)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 159, in setup
+    self.setup_optimizers(trainer)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 139, in setup_optimizers
+    self.optimizers, self.lr_scheduler_configs = _init_optimizers_and_lr_schedulers(self.lightning_module)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\core\optimizer.py", line 180, in _init_optimizers_and_lr_schedulers
+    optim_conf = call._call_lightning_module_hook(model.trainer, "configure_optimizers", pl_module=model)
+  File "C:\Users\devin\miniconda3\envs\perceiver-io\lib\site-packages\pytorch_lightning\trainer\call.py", line 176, in _call_lightning_module_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\devin\School\fomo\perceiver\examples\training\img_clf\full_train.py", line 349, in configure_optimizers
+    scheduler_config = create_lr_scheduler(self.hparams, optimizer)
+  File "C:\Users\devin\School\fomo\perceiver\examples\training\img_clf\config_utils.py", line 176, in create_lr_scheduler
+    from perceiver.scripts.lrs import ConstantWithWarmupLR
+  File "C:\Users\devin\School\fomo\perceiver\perceiver\scripts\__init__.py", line 2, in <module>
+    import s3fs
+ModuleNotFoundError: No module named 's3fs'
+

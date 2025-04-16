@@ -1,12 +1,13 @@
 """
 Configuration utilities for Perceiver IO training.
 """
-
+import math
 import os
 import yaml
 from pathlib import Path
 from typing import Dict, Any, Optional
 import json
+import torch.optim.lr_scheduler as lr_scheduler
 
 
 def load_config(config_path: str) -> Dict[str, Any]:
@@ -124,7 +125,6 @@ def log_config(config: Dict[str, Any], logger):
     logger.info(f"  Num frequency bands: {config['model']['encoder']['num_frequency_bands']}")
     logger.info(f"  Cross attention layers: {config['model']['encoder']['num_cross_attention_layers']}")
     logger.info(f"  Self attention blocks: {config['model']['encoder']['num_self_attention_blocks']}")
-
     # Log training settings
     logger.info("Training settings:")
     logger.info(f"  Max epochs: {config['training']['max_epochs']}")
@@ -153,7 +153,7 @@ def create_optimizer(config: Dict[str, Any], parameters):
     weight_decay = config["training"]["optimizer"]["weight_decay"]
 
     if optimizer_name == "adamw":
-        return AdamW(parameters, lr=lr, weight_decay=weight_decay)
+        return AdamW(parameters, lr=lr, weight_decay=weight_decay, betas=(0.9, 0.95))
     elif optimizer_name == "adam":
         return Adam(parameters, lr=lr, weight_decay=weight_decay)
     elif optimizer_name == "sgd":
@@ -181,6 +181,24 @@ def create_lr_scheduler(config: Dict[str, Any], optimizer):
         warmup_steps = config["training"]["lr_scheduler"]["warmup_steps"]
         scheduler = ConstantWithWarmupLR(optimizer, warmup_steps=warmup_steps)
         scheduler_config = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+    elif scheduler_name == "warmup_cosine":
+        warmup_epochs = config["training"]["lr_scheduler"]["warmup_epochs"]
+        total_epochs = config["training"]["lr_scheduler"]["total_epochs"]
+        min_lr = config["training"]["lr_scheduler"]["min_lr"]
+
+        base_lr = config["training"]["optimizer"]["lr"]
+
+        def lr_lambda(epoch):
+            if epoch < warmup_epochs:
+                # Linear warmup phase
+                return epoch / warmup_epochs
+            else:
+                # Cosine decay phase
+                progress = (epoch - warmup_epochs) / (total_epochs - warmup_epochs)
+                cosine_decay = 0.5 * (1 + math.cos(math.pi * progress))
+                return max(min_lr / base_lr, cosine_decay)
+        scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda)
+        scheduler_config = {"scheduler": scheduler, "interval": "epoch", "frequency": 1}
     else:
         raise ValueError(f"Unsupported scheduler: {scheduler_name}")
 

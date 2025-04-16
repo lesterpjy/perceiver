@@ -1,0 +1,60 @@
+data:
+  batch_size: 32
+  dataset: cifar
+  num_workers: 0
+  pin_memory: false
+  val_split: 0.1
+experiment:
+  description: Local CPU test of CIFAR classification using Perceiver IO
+  name: perceiver_cifar_local
+  output_dir: results_local
+  seed: 42
+logging:
+  console: true
+  csv: true
+  file: true
+  level: INFO
+  tensorboard: true
+model:
+  encoder:
+    dropout: 0.1
+    first_cross_attention_layer_shared: false
+    first_self_attention_block_shared: false
+    init_scale: 0.1
+    num_cross_attention_heads: 1
+    num_cross_attention_layers: 1
+    num_frequency_bands: 8
+    num_self_attention_blocks: 1
+    num_self_attention_layers_per_block: 1
+  perceiver:
+    num_classes: 100
+    num_latent_channels: 32
+    num_latents: 8
+testing:
+  use_best_checkpoint: false
+training:
+  accelerator: cpu
+  checkpoint:
+    dirpath: checkpoints
+    filename: perceiver-{epoch:02d}-{val_acc:.4f}
+    mode: max
+    monitor: val_acc
+    save_top_k: 1
+  deterministic: true
+  devices: 1
+  early_stopping:
+    enabled: false
+    min_delta: 0.001
+    mode: max
+    monitor: val_acc
+    patience: 5
+  lr_scheduler:
+    name: constant_with_warmup
+    warmup_steps: 10
+  max_epochs: 1
+  optimizer:
+    lr: 0.001
+    name: adamw
+    weight_decay: 0.0001
+  precision: 32
+  strategy: auto

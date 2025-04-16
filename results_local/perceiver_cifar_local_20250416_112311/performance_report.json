@@ -1,0 +1,20 @@
+{
+  "epochs_completed": 2,
+  "max_epochs": 1,
+  "early_stopping": false,
+  "metrics": {
+    "test_loss": 3.9425852298736572,
+    "test_acc": 0.08349999785423279,
+    "test_f1": 0.08349999785423279
+  },
+  "compute_stats": {
+    "total_time_seconds": 90.50310063362122,
+    "total_time_formatted": "0:01:30.503101",
+    "epoch_times": [],
+    "avg_epoch_time": 0,
+    "avg_epoch_time_formatted": "0:00:00",
+    "flops_per_forward_pass": 3512108.0,
+    "flops_table": "| module                      | #parameters or shape   | #flops     |\n|:----------------------------|:-----------------------|:-----------|\n| model                       | 49.262K                | 3.512M     |\n|  0                          |  45.898K               |  3.509M    |\n|   0.latent_provider         |   0.256K               |   0        |\n|    0.latent_provider._query |    (8, 32)             |            |\n|   0.cross_attn_1            |   6.858K               |   3.174M   |\n|    0.cross_attn_1.0.module  |    4.682K              |    3.156M  |\n|    0.cross_attn_1.1.module  |    2.176K              |    17.664K |\n|   0.self_attn_1             |   38.784K              |   0.335M   |\n|    0.self_attn_1.0          |    6.464K              |    55.808K |\n|    0.self_attn_1.1          |    6.464K              |    55.808K |\n|    0.self_attn_1.2          |    6.464K              |    55.808K |\n|    0.self_attn_1.3          |    6.464K              |    55.808K |\n|    0.self_attn_1.4          |    6.464K              |    55.808K |\n|    0.self_attn_1.5          |    6.464K              |    55.808K |\n|  to_logits                  |  3.364K                |  3.36K     |\n|   to_logits.1               |   64                   |   0.16K    |\n|    to_logits.1.weight       |    (32,)               |            |\n|    to_logits.1.bias         |    (32,)               |            |\n|   to_logits.2               |   3.3K                 |   3.2K     |\n|    to_logits.2.weight       |    (100, 32)           |            |\n|    to_logits.2.bias         |    (100,)              |            |",
+    "estimated_total_flops": 21957699216.0
+  }
+}

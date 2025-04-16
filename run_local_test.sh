@@ -14,7 +14,8 @@ python -c "import torch; torch.set_float32_matmul_precision('medium')"
 
 # Run the local test script
 echo "Starting local CPU testing..."
-python test_perceiver_local.py
+# python test_perceiver_local.py
+python cifar_perceiver_test.py
 
 # Show results
 echo "Check the results_local directory for testing outputs."
